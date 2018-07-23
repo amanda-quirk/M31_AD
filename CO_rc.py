@@ -4,9 +4,9 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 
 #r (kpc), v_rot no model (km/s), v_rot tr model, smoothed PA, sPA v_rot no model, sPA v_rot tr model, n, HI main no model, HI main tr, HI close no model, HI close tr
-RG_r, RG_vrot, HI_vrot = np.loadtxt('/Users/amandaquirk/Desktop/RG_master_vrot.txt', usecols=(0,2,8), unpack=True)
-RG_xi, RG_eta=np.loadtxt('/Users/amandaquirk/Desktop/RG_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
-CO_xi, CO_eta, CO_v = np.loadtxt('/Users/amandaquirk/Desktop/CO/RG_CO.txt', unpack = True)
+RG_r, RG_vrot, HI_vrot = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_master_vrot.txt', usecols=(0,2,8), unpack=True)
+RG_xi, RG_eta=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
+CO_xi, CO_eta, CO_v = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_CO.txt', unpack = True)
 
 #need to do a cut on the location of the star data so that it doesn't go beyond the CO field
 CO_field = RG_eta < 16.8 - 0.8 * RG_xi
@@ -57,7 +57,7 @@ CO_PA=[]
 for i in range(len(CO_r)):
 	CO_PA.append(PA(CO_x[i], CO_y[i]))
 
-HI_r, HI_PA, HI_i, HI_v=np.loadtxt('/Users/amandaquirk/Desktop/HI_PA_i_vrot.txt', unpack=True)
+HI_r, HI_PA, HI_i, HI_v=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/HI_PA_i_vrot.txt', unpack=True)
 
 #below defines a function to determine which HI ring a star is cloest to
 def find_nearest_ring(radius):
@@ -93,7 +93,7 @@ plt.xlim(4,18)
 plt.ylim(100,300)
 plt.xlabel('r [kpc]')
 plt.ylabel('rotational v [km/s]')
-plt.savefig('RG_CO_rc.png')
+plt.savefig('/Users/amandaquirk/Desktop/RG_CO_rc.png')
 plt.close()
 
 def va(gas, stars):
@@ -109,5 +109,5 @@ plt.hist(RG_HI_ad, histtype='step', bins=range(-200, 200, 15),label='HI med= {}'
 plt.legend(loc=2, frameon=False)
 plt.xlabel('Asymmetric Drift (km/s)')
 plt.xlim(-200, 200)
-plt.savefig('RG_CO_ad.png')
+plt.savefig('/Users/amandaquirk/Desktop/RG_CO_ad.png')
 

@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 import numpy as np 
 
 #first step is to get the CO values
-hdulist=fits.open('/Users/amandaquirk/Desktop/CO/m31_iram/m31_iram.mom1.fits')
+hdulist=fits.open('/Users/amandaquirk/Documents/AsymmetricDrift/Data/m31_iram/m31_iram.mom1.fits')
 
 #read in header info for astropy's coordinate converter
 w = wcs.WCS(hdulist[0].header, naxis = 2)
 
 #read in Av value
-data=hdulist[0].data
+data=hdulist[0].data 
 
 #pixel values of dust map
 x_vals=np.linspace(0, 549, 550)
@@ -52,7 +52,7 @@ CO_eta=m31_coord(RA_good, Dec_good, x=False)
 
 #importing the star data
 #xi (kpc), eta (kpc), average v(km/s), v err,var, n, HI main, HI close <-- header of data file to be read in 
-RG_xi, RG_eta=np.loadtxt('/Users/amandaquirk/Desktop/RG_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
+RG_xi, RG_eta=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
 
 #line to see where CO data ends
 def y(x):
