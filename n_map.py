@@ -1,0 +1,68 @@
+import numpy as np 
+import matplotlib.pyplot as plt
+import matplotlib
+from matplotlib import rc
+from matplotlib import patches
+
+MS_xi, MS_eta, MS_v, MS_dispersion, MS_n, MS_HImain, MS_HIclose=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_smoothed_chemin.txt', usecols=(0,1,2,4,5,6,7,), unpack=True)
+AGy_xi, AGy_eta, AGy_v, AGy_dispersion,AGy_n, AGy_HImain, AGy_HIclose=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_smoothed_chemin.txt', usecols=(0,1,2,4,5,6,7,), unpack=True)
+AGo_xi, AGo_eta, AGo_v, AGo_dispersion, AGo_n, AGo_HImain, AGo_HIclose=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_smoothed_chemin.txt', usecols=(0,1,2,4,5,6,7,), unpack=True)
+RG_xi, RG_eta, RG_v, RG_dispersion, RG_n, RG_HImain, RG_HIclose=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_smoothed_chemin.txt', usecols=(0,1,2,4,5,6,7,), unpack=True)
+
+ylength=37.5
+xlength=ylength*np.cos(float(73.7*np.pi) / 180)
+e =  patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
+e1 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
+e2 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
+e3 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
+e4 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
+
+rc('font', family = 'serif')
+cmap=plt.cm.rainbow
+norm = matplotlib.colors.BoundaryNorm([0.5,1.5,2.5,3.5,4.5,5.5], cmap.N)
+f, axes= plt.subplots(1,5, sharey=True, sharex=False, figsize=(13.8,3.42))
+axes[4].add_patch(e4)
+axes[3].add_patch(e3)
+axes[2].add_patch(e2)
+axes[1].add_patch(e1)
+axes[0].add_patch(e)
+axes[0].scatter(MS_xi,MS_eta, c=MS_n,    s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[1].scatter(AGy_xi,AGy_eta, c=AGy_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[2].scatter(AGo_xi,AGo_eta, c=AGo_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[4].scatter(MS_xi,MS_eta, c=MS_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[4].scatter(AGy_xi,AGy_eta, c=AGy_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[4].scatter(AGo_xi,AGo_eta, c=AGo_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+axes[4].scatter(RG_xi,RG_eta, c=RG_n, s=5, cmap=cmap, norm=norm, edgecolor='none') 
+im=axes[3].scatter(RG_xi,RG_eta, c=RG_n, s=5, cmap=cmap, norm=norm, edgecolor='none')
+for ax in axes:
+	ax.set_xlim(13, -1.5)
+	ax.set_xlabel(r'$\xi\ (kpc)$', fontsize=13)
+	ax.set_ylim(-2.5,15.5)
+	ax.tick_params(axis='x',which='both',bottom='on',top='off', direction='out')
+	ax.tick_params(axis='x',which='both',top='on', direction='in')
+	ax.tick_params(axis='y',which='both',left='on',top='off', direction='out')
+	ax.tick_params(axis='y',which='both',right='on', direction='in')
+	ax.tick_params(which='both', width=1)
+	ax.tick_params(which='major', length=7)
+	ax.tick_params(which='minor', length=4)
+	ax.tick_params(labelsize=12) 
+	ax.minorticks_on()
+	for axis in ['top','bottom','left','right']:
+	        ax.spines[axis].set_linewidth(1)
+axes[0].set_ylabel(r'$\eta\ (kpc)$', fontsize=13)
+f.subplots_adjust(right=0.885)
+cbar_ax = f.add_axes([0.89, 0.13, 0.01, 0.72])
+clb=f.colorbar(im, cax=cbar_ax, ticks=np.linspace(1,5,5))
+clb.set_label(r'Multiplicity of HI: $N_{\rm HI}$', fontsize=13)
+axes[0].scatter(0,0,marker='+', c='b', linewidth=2)
+axes[1].scatter(0,0,marker='+', c='b', linewidth=2)
+axes[2].scatter(0,0,marker='+', c='b', linewidth=2)
+axes[3].scatter(0,0,marker='+', c='b', linewidth=2)
+axes[4].scatter(0,0,marker='+', c='b', linewidth=2)
+axes[0].annotate('MS', xy=(-.55,13.5), horizontalalignment='right', fontsize=12)
+axes[1].annotate('young AGB', xy=(-.55,13.5), horizontalalignment='right', fontsize=12)
+axes[2].annotate('older AGB', xy=(-.55,13.5), horizontalalignment='right', fontsize=12)
+axes[3].annotate('RGB', xy=(-.55,13.5), horizontalalignment='right', fontsize=12)
+axes[4].annotate('all LOS', xy=(-.55,13.5), horizontalalignment='right', fontsize=12)
+plt.subplots_adjust(wspace=0, hspace=0)
+plt.savefig('/Users/amandaquirk/Desktop/n_maps.pdf', bbox_inches='tight')
