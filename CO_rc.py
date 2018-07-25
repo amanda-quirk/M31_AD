@@ -2,15 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 #r (kpc), v_rot no model (km/s), v_rot tr model, smoothed PA, sPA v_rot no model, sPA v_rot tr model, n, HI main no model, HI main tr, HI close no model, HI close tr
-MS_r, MS_vrot, HI_vrot = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_master_vrot.txt', usecols=(0,2,8), unpack=True)
-MS_xi, MS_eta=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
-CO_xi, CO_eta, CO_v, CO_RA, CO_Dec = np.loadtxt('/Users/amandaquirk/Desktop/MS_CO.txt', unpack = True)
+RG_r, RG_vrot, HI_vrot = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_master_vrot.txt', usecols=(0,2,8), unpack=True)
+RG_xi, RG_eta=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_smoothed_chemin.txt', usecols=(0,1,), unpack=True)
+CO_xi, CO_eta, CO_v, CO_RA, CO_Dec = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_CO.txt', unpack = True)
 
 #need to do a cut on the location of the star data so that it doesn't go beyond the CO field
-CO_field = MS_eta < 16.8 - 0.8 * MS_xi
+CO_field = RG_eta < 16.8 - 0.8 * RG_xi
 
-MS_r = MS_r[CO_field]
-MS_vrot = MS_vrot[CO_field]
+RG_r = RG_r[CO_field]
+RG_vrot = RG_vrot[CO_field]
 HI_vrot = HI_vrot[CO_field]
 
 #below defines a function that converts eta and xi and then uses the shifted coordinates to find the deprojected radius. to calculate the deprojected radius from the center, we must shift the xi and eta according to the PA of the disk. (This is a simple shift of coordinate axes.) We will assume the disk has a PA of 37 deg and an inclination of 77 deg 
@@ -108,28 +108,30 @@ def Vrot_tilted_ring(v,PA_ring,PA_star, i_ring):
 
 CO_vrot = Vrot_tilted_ring(CO_v_helio, CO_PA_ring, CO_PA, CO_i)
 
-plt.scatter(MS_r, HI_vrot, s=5, c='darkgrey', alpha=0.4)
-plt.scatter(CO_r, CO_vrot, s=5, c='darkcyan', marker='s', alpha=0.4)
-plt.scatter(MS_r, MS_vrot, s=5, c='r', alpha=0.4)
-plt.xlim(4,18)
-plt.ylim(100,300)
-plt.xlabel('r [kpc]')
-plt.ylabel('rotational v [km/s]')
-plt.savefig('/Users/amandaquirk/Desktop/MS_CO_rc.png')
-plt.close()
+# plt.scatter(RG_r, HI_vrot, s=5, c='darkgrey', alpha=0.4)
+# plt.scatter(CO_r, CO_vrot, s=5, c='darkcyan', marker='s', alpha=0.4)
+# plt.scatter(RG_r, RG_vrot, s=5, c='r', alpha=0.4)
+# plt.xlim(4,18)
+# plt.ylim(100,300)
+# plt.xlabel('r [kpc]')
+# plt.ylabel('rotational v [km/s]')
+# plt.savefig('/Users/amandaquirk/Desktop/RG_CO_rc.png')
+# plt.close()
 
 def va(gas, stars):
 	return gas - stars
 
-MS_CO_ad = va(CO_vrot, MS_vrot)
-MS_HI_ad = va(HI_vrot, MS_vrot)
-CO_med = round(np.median(MS_CO_ad), 2)
-HI_med = round(np.median(MS_HI_ad), 2)
+RG_CO_ad = va(CO_vrot, RG_vrot)
+RG_HI_ad = va(HI_vrot, RG_vrot)
+CO_med = round(np.median(RG_CO_ad), 2)
+HI_med = round(np.median(RG_HI_ad), 2)
 
-plt.hist(MS_CO_ad, histtype='step', bins=range(-200, 200, 15), label='CO med= {}'.format(CO_med), linewidth=1.6,linestyle='--',stacked=True,fill=False, color='darkcyan')
-plt.hist(MS_HI_ad, histtype='step', bins=range(-200, 200, 15),label='HI med= {}'.format(HI_med),linewidth=1.6,stacked=True,fill=False, color='darkgrey')
-plt.legend(loc=2, frameon=False)
-plt.xlabel('Asymmetric Drift (km/s)')
-plt.xlim(-200, 200)
-plt.savefig('/Users/amandaquirk/Desktop/MS_CO_ad.png')
+# plt.hist(RG_CO_ad, histtype='step', bins=range(-200, 200, 15), label='CO med= {}'.format(CO_med), linewidth=1.6,linestyle='--',stacked=True,fill=False, color='darkcyan')
+# plt.hist(RG_HI_ad, histtype='step', bins=range(-200, 200, 15),label='HI med= {}'.format(HI_med),linewidth=1.6,stacked=True,fill=False, color='darkgrey')
+# plt.legend(loc=2, frameon=False)
+# plt.xlabel('Asymmetric Drift (km/s)')
+# plt.xlim(-200, 200)
+# plt.savefig('/Users/amandaquirk/Desktop/RG_CO_ad.png')
+
+np.savetxt('/Users/amandaquirk/Desktop/RG_CO_ad.txt', np.c_[RG_r, CO_vrot, RG_CO_ad], fmt='%1.16f', delimiter=' ', header='r (kpc), v (km/s), ad (km/s)')
 
