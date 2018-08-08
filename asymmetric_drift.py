@@ -21,6 +21,11 @@ AGy_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_dust.tx
 AGo_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_dust.txt', usecols=(2,), unpack=True)
 RG_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_dust.txt', usecols=(2,), unpack=True)
 
+MS_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_CO_ad.txt', usecols=(2,), unpack= True)
+AGy_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_CO_ad.txt', usecols=(2,), unpack= True)
+AGo_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_CO_ad.txt', usecols=(2,), unpack= True)
+RG_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_CO_ad.txt', usecols=(2,), unpack= True)
+
 def asymmetric_drift(v_star, v_gas):
 	return v_gas-v_star
 
@@ -47,14 +52,14 @@ plt.tick_params(which='major', length=7)
 plt.tick_params(which='minor', length=4)
 plt.tick_params(labelsize=12) 
 plt.minorticks_on()
-plt.hist(MS_ad, bins=range(-200, 300, 20), label='MS={} stars'.format(len(MS_ad)),normed=1, histtype='step', linewidth=1.6,linestyle='--',stacked=True,fill=False, color='b')
-plt.hist(AGy_ad,  bins=range(-200, 300, 20),label='young AGB={} stars'.format(len(AGy_ad)),normed=1, histtype='step', linewidth=1.6,stacked=True,fill=False, color='m')
-plt.hist(AGo_ad,  bins=range(-200, 300, 20),label='old AGB={} stars'.format(len(AGo_ad)),normed=1,histtype='step', linewidth=1.6,stacked=True,fill=False, color='k')
-plt.hist(RG_ad, bins=range(-200, 300, 20), label='RGB={} stars'.format(len(RG_ad)),normed=1,histtype='step', linewidth=1.6,linestyle='--',stacked=True,fill=False, color='r')
+plt.hist(MS_ad_CO, bins=range(-200, 300, 20), label='MS={} stars'.format(len(MS_ad_CO)),normed=1, histtype='step', linewidth=1.6,linestyle='--',stacked=True,fill=False, color='b')
+plt.hist(AGy_ad_CO,  bins=range(-200, 300, 20),label='young AGB={} stars'.format(len(AGy_ad_CO)),normed=1, histtype='step', linewidth=1.6,stacked=True,fill=False, color='m')
+plt.hist(AGo_ad_CO,  bins=range(-200, 300, 20),label='old AGB={} stars'.format(len(AGo_ad_CO)),normed=1,histtype='step', linewidth=1.6,stacked=True,fill=False, color='k')
+plt.hist(RG_ad_CO, bins=range(-200, 300, 20), label='RGB={} stars'.format(len(RG_ad_CO)),normed=1,histtype='step', linewidth=1.6,linestyle='--',stacked=True,fill=False, color='r')
 plt.legend(loc=1, frameon=False)
 plt.xlim(-200,300)
 plt.xlabel(r'$ \rm Asymmetric\ Drift:\ \itv_{a}\ \rm(km\ s^{-1})$', fontsize=13)
-plt.savefig('/Users/amandaquirk/Desktop/asymmetric_drift_zoom.pdf')
+plt.savefig('/Users/amandaquirk/Desktop/CO_asymmetric_drift_zoom.pdf')
 
 def lag_n_plt(n, lag, age):
 	plt.scatter(n, lag, alpha=.3)

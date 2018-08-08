@@ -38,6 +38,19 @@ e9 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fil
 e10 =  patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
 e11 = patches.Ellipse((0, 0), xlength, ylength, angle=180-37.1, linewidth=.5, fill=False, zorder=0)
 
+centerx= 10
+centery= 0
+radius1= 200 / 60 / 60 * 13.67
+radius2= 275 / 60 / 60 * 13.67
+c = plt.Circle((centerx, centery), radius1, color='k', fill=False)
+c1 = plt.Circle((centerx, centery), radius1, color='k', fill=False)
+c2 = plt.Circle((centerx, centery), radius1, color='k', fill=False)
+c3 = plt.Circle((centerx, centery), radius1, color='k', fill=False)
+c4 = plt.Circle((centerx, centery), radius2, color='k', fill=False)
+c5 = plt.Circle((centerx, centery), radius2, color='k', fill=False)
+c6 = plt.Circle((centerx, centery), radius2, color='k', fill=False)
+c7 = plt.Circle((centerx, centery), radius2, color='k', fill=False)
+
 rc('font', family = 'serif')
 f, axes= plt.subplots(3,4, sharey=True, sharex=False, figsize=(11.1,10.26))
 axes[0,0].add_patch(e)
@@ -55,13 +68,17 @@ axes[0,2].annotate('older AGB', xy=(-.550,13.5), horizontalalignment='right', fo
 axes[0,3].annotate('RGB', xy=(-.550,13.5), horizontalalignment='right', fontsize=12)
 
 axes[1,0].add_patch(e4)
+axes[1,0].add_artist(c)
 axes[1,0].scatter(MS_avg_xi,MS_avg_eta, c=MS_avg_v, cmap='plasma', s=4, vmin=-300,vmax=0) 
 axes[1,1].add_patch(e5)
 axes[1,1].scatter(AGy_avg_xi,AGy_avg_eta, c=AGy_avg_v, cmap='plasma', s=4, vmin=-300,vmax=0)
+axes[1,1].add_artist(c4)
 axes[1,2].add_patch(e6) 
 axes[1,2].scatter(AGo_avg_xi,AGo_avg_eta, c=AGo_avg_v, cmap='plasma', s=4, vmin=-300,vmax=0) 
+axes[1,2].add_artist(c5)
 axes[1,3].add_patch(e7)
 im1=axes[1,3].scatter(RG_avg_xi,RG_avg_eta, c=RG_avg_v, cmap='plasma', s=4, vmin=-300,vmax=0)
+axes[1,3].add_artist(c1)
 
 axes[1,0].annotate('MS', xy=(-.550,13.5), horizontalalignment='right', fontsize=12)
 axes[1,1].annotate('young AGB', xy=(-.550,13.5), horizontalalignment='right', fontsize=12)
@@ -70,11 +87,15 @@ axes[1,3].annotate('RGB', xy=(-.550,13.5), horizontalalignment='right', fontsize
 
 axes[2,0].add_patch(e8)
 axes[2,0].scatter(MS_avg_xi,MS_avg_eta, c=MS_var, cmap='copper', s=4, vmin=10,vmax=150) 
+axes[2,0].add_artist(c2)
 axes[2,1].add_patch(e9)
 axes[2,1].scatter(AGy_avg_xi,AGy_avg_eta, c=AGy_var, cmap='copper', s=4, vmin=10,vmax=150)
 axes[2,2].add_patch(e10)
+axes[2,1].add_artist(c6)
+axes[2,2].add_artist(c7)
 axes[2,2].scatter(AGo_avg_xi,AGo_avg_eta, c=AGo_var, cmap='copper', s=4,vmin=10,vmax=150) 
 axes[2,3].add_patch(e11)
+axes[2,3].add_artist(c3)
 im2=axes[2,3].scatter(RG_avg_xi,RG_avg_eta, c=RG_var, cmap='copper', s=4,vmin=10,vmax=150)
 
 axes[2,0].annotate('MS', xy=(-.550,13.5), horizontalalignment='right', fontsize=12)

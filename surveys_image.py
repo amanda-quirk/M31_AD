@@ -54,6 +54,8 @@ y1=[.2, 15]
 x2=[.55, 12]
 y2=[.2,17]
 
+CO_xi, CO_eta= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_CO.txt', usecols=(0,1), unpack=True)
+
 fig, ax=plt.subplots(1)
 for axis in ['top','bottom','left','right']:
         ax.spines[axis].set_linewidth(2)
@@ -67,12 +69,13 @@ plt.imshow(img, extent=[15, -15, -14.1, 16], zorder=0)#[max(xi_good),-max(xi_goo
 plt.plot(x1,y1, c='aqua', linewidth=1, zorder=1)
 plt.plot(x2,y2, c='aqua', linewidth=1, zorder=1)
 plt.scatter(xi_good, eta_good, c='crimson', alpha=0.15, s=1, zorder=2)
+plt.scatter(CO_xi, CO_eta, c='orange', alpha=.5, s=1, zorder=3)
 #plt.plot(x_HI, y_HI, c='g')
 plt.xlim(15,-15)
 plt.ylim(-14.1,16)
 plt.xlabel(r'$\xi\ (kpc)$', fontsize=13)
 plt.ylabel(r'$\eta\ (kpc)$', fontsize=13)
-plt.savefig('/Users/amandaquirk/Desktop/surveys_no_lines.pdf', bbox_inches='tight')
+plt.savefig('/Users/amandaquirk/Desktop/surveys_lines.pdf', bbox_inches='tight')
 
 
 
