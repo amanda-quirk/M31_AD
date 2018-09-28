@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib import rc
 from matplotlib.ticker import MaxNLocator
+from functions import *
 
 #import data
 #importing all of the data
@@ -158,26 +159,52 @@ AGy_HIvrot_clear=[a for a,b in zip(AGy_HImain_vrot_tr, AGy_Av) if b<1]
 AGo_HIvrot_clear=[a for a,b in zip(AGo_HImain_vrot_tr, AGo_Av) if b<1]
 RG_HIvrot_clear=[a for a,b in zip(RG_HImain_vrot_tr, RG_Av) if b<1]
 
-from matplotlib.ticker import MaxNLocator
+AGo_r_med, AGo_vrot_med = median_line(AGo_r_clear, AGo_vrot_clear)
+MS_r_med, MS_vrot_med = median_line(MS_r_clear, MS_vrot_clear)
+AGy_r_med, AGy_vrot_med = median_line(AGy_r_clear, AGy_vrot_clear)
+RG_r_med, RG_vrot_med = median_line(RG_r_clear, RG_vrot_clear)
+AGo_r_med, HI_AGo_vrot_med = median_line(AGo_r_clear, AGo_HIvrot_clear)
+MS_r_med, HI_MS_vrot_med = median_line(MS_r_clear, MS_HIvrot_clear)
+AGy_r_med, HI_AGy_vrot_med = median_line(AGy_r_clear, AGy_HIvrot_clear)
+RG_r_med, HI_RG_vrot_med = median_line(RG_r_clear, RG_HIvrot_clear)
+
+AGo_AD = asymmetric_drift(AGo_vrot_clear, AGo_HIvrot_clear)
+MS_AD = asymmetric_drift(MS_vrot_clear, MS_HIvrot_clear)
+AGy_AD = asymmetric_drift(AGy_vrot_clear, AGy_HIvrot_clear)
+RG_AD = asymmetric_drift(RG_vrot_clear, RG_HIvrot_clear)
 
 rc('font', family = 'serif')
 f, axes= plt.subplots(4,1, sharey=False, sharex=True, figsize=(4,9.8))
-axes[0].scatter(MS_r_dust, MS_HIvrot_dust, s=2, c='darkgray')
-axes[0].scatter(MS_r_dust, MS_vrot_dust, s=2, c='b', alpha=0.4)
-axes[1].scatter(AGy_r_dust, AGy_HIvrot_dust, s=2, c='darkgray')
-axes[1].scatter(AGy_r_dust, AGy_vrot_dust, s=2, c='m', alpha=0.4)
-axes[2].scatter(AGo_r_dust, AGo_HIvrot_dust, s=2, c='darkgray')
-axes[2].scatter(AGo_r_dust, AGo_vrot_dust, s=2, c='k', alpha=0.4)
-axes[3].scatter(RG_r_dust, RG_HIvrot_dust, s=2, c='darkgray')
-axes[3].scatter(RG_r_dust, RG_vrot_dust, s=2, c='r', alpha=0.4)
-axes[0].annotate('MS', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[1].annotate('young AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[2].annotate('older AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[3].annotate('RGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-# axes[0].annotate('f=0.57', xy=(10,115), horizontalalignment='left', fontsize=12)
-# axes[1].annotate('f=0.78', xy=(10,115), horizontalalignment='left', fontsize=12)
-# axes[2].annotate('f=0.74', xy=(10,115), horizontalalignment='left', fontsize=12)
-# axes[3].annotate('f=0.77', xy=(10,115), horizontalalignment='left', fontsize=12)
+axes[0].scatter(MS_r_clear, MS_HIvrot_clear, s=2, c='darkgray')
+axes[0].scatter(MS_r_clear, MS_vrot_clear, s=2, c='b', alpha=0.4)
+axes[1].scatter(AGy_r_clear, AGy_HIvrot_clear, s=2, c='darkgray')
+axes[1].scatter(AGy_r_clear, AGy_vrot_clear, s=2, c='m', alpha=0.4)
+axes[2].scatter(AGo_r_clear, AGo_HIvrot_clear, s=2, c='darkgray')
+axes[2].scatter(AGo_r_clear, AGo_vrot_clear, s=2, c='green', alpha=0.4)
+axes[3].scatter(RG_r_clear, RG_HIvrot_clear, s=2, c='darkgray')
+axes[3].scatter(RG_r_clear, RG_vrot_clear, s=2, c='r', alpha=0.4)
+axes[0].annotate('MS', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(MS_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[0].plot(MS_r_med, MS_vrot_med, linestyle='-', c='black', linewidth = 1.8, alpha=.85)
+axes[0].plot(MS_r_med, HI_MS_vrot_med, linestyle='--', c='black', linewidth = 1.8, alpha=.85)
+axes[1].plot(AGy_r_med, AGy_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[1].plot(AGy_r_med, HI_AGy_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[2].plot(AGo_r_med, AGo_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[2].plot(AGo_r_med, HI_AGo_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[3].plot(RG_r_med, RG_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[3].plot(RG_r_med, HI_RG_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[1].annotate('young AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGy_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[2].annotate('older AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[2].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[3].annotate('RGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[3].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(RG_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+
+axes[0].annotate(r'$\rm f=0.57$', xy=(5,112), horizontalalignment='left', fontsize=10)
+axes[1].annotate(r'$\rm f=0.78$', xy=(5,112), horizontalalignment='left', fontsize=10)
+axes[2].annotate(r'$\rm f=0.74$', xy=(5,112), horizontalalignment='left', fontsize=10)
+axes[3].annotate(r'$\rm f=0.77$', xy=(5,112), horizontalalignment='left', fontsize=10)
+
 
 for ax in axes:
 	ax.set_xlim(4, 20)
@@ -202,7 +229,7 @@ axes[2].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
 f.subplots_adjust(left=0.17)
 f.text(0.008, 0.5, r'$\rm Rotation\ Velocity:\ \itv_{\rm rot}\ \rm(km\ s^{-1})$', va='center', rotation='vertical', fontsize=13)
 plt.subplots_adjust(wspace=0, hspace=0)
-plt.savefig('/Users/amandaquirk/Desktop/dusty_rcs.pdf', bbox_inches='tight')
+plt.savefig('/Users/amandaquirk/Desktop/clear_rcs.pdf', bbox_inches='tight')
 
 # dust_rotation_curve(MS_Av, MS_r, MS_vrot_tr, MS_HImain_vrot_tr, 'MS', dusty=True)
 # dust_rotation_curve(MS_Av, MS_r, MS_vrot_tr, MS_HImain_vrot_tr, 'MS', dusty=False)
@@ -277,6 +304,20 @@ for i in range(len(RG_HIclose_vrot_tr)):
 		RG_vrot_not0.append(RG_vrot_tr[i])
 		RG_HImain_not0.append(RG_HImain_vrot_tr[i])
 
+# AGo_r_med, AGo_vrot_med = median_line(AGo_r_0, AGo_vrot_0)
+# MS_r_med, MS_vrot_med = median_line(MS_r_0, MS_vrot_0)
+# AGy_r_med, AGy_vrot_med = median_line(AGy_r_0, AGy_vrot_0)
+# RG_r_med, RG_vrot_med = median_line(RG_r_0, RG_vrot_0)
+# AGo_r_med, HI_AGo_vrot_med = median_line(AGo_r_0, AGo_HImain_0)
+# MS_r_med, HI_MS_vrot_med = median_line(MS_r_0, MS_HImain_0)
+# AGy_r_med, HI_AGy_vrot_med = median_line(AGy_r_0, AGy_HImain_0)
+# RG_r_med, HI_RG_vrot_med = median_line(RG_r_0, RG_HImain_0)
+
+# AGo_AD = asymmetric_drift(AGo_vrot_0, AGo_HImain_0)
+# MS_AD = asymmetric_drift(MS_vrot_0, MS_HImain_0)
+# AGy_AD = asymmetric_drift(AGy_vrot_0, AGy_HImain_0)
+# RG_AD = asymmetric_drift(RG_vrot_0, RG_HImain_0)
+
 # rc('font', family = 'serif')
 # f, axes= plt.subplots(4,1, sharey=False, sharex=True, figsize=(4,9.8))
 # axes[0].scatter(MS_r_0, MS_HImain_0, s=2, c='darkgray')
@@ -284,13 +325,25 @@ for i in range(len(RG_HIclose_vrot_tr)):
 # axes[1].scatter(AGy_r_0, AGy_HImain_0, s=2, c='darkgray')
 # axes[1].scatter(AGy_r_0, AGy_vrot_0, s=2, c='m', alpha=0.4)
 # axes[2].scatter(AGo_r_0, AGo_HImain_0, s=2, c='darkgray')
-# axes[2].scatter(AGo_r_0, AGo_vrot_0, s=2, c='k', alpha=0.4)
+# axes[2].scatter(AGo_r_0, AGo_vrot_0, s=2, c='green', alpha=0.4)
 # axes[3].scatter(RG_r_0, RG_HImain_0, s=2, c='darkgray')
 # axes[3].scatter(RG_r_0, RG_vrot_0, s=2, c='r', alpha=0.4)
-# axes[0].annotate('MS', xy=(19,115), horizontalalignment='right', fontsize=12)
-# axes[1].annotate('young AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-# axes[2].annotate('older AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-# axes[3].annotate('RGB', xy=(19,115), horizontalalignment='right', fontsize=12)
+# axes[0].annotate('MS', xy=(19,128), horizontalalignment='right', fontsize=10)
+# axes[0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(MS_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+# axes[0].plot(MS_r_med, MS_vrot_med, linestyle='-', c='black', linewidth = 1.8, alpha=.85)
+# axes[0].plot(MS_r_med, HI_MS_vrot_med, linestyle='--', c='black', linewidth = 1.8, alpha=.85)
+# axes[1].plot(AGy_r_med, AGy_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[1].plot(AGy_r_med, HI_AGy_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+# axes[2].plot(AGo_r_med, AGo_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[2].plot(AGo_r_med, HI_AGo_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+# axes[3].plot(RG_r_med, RG_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[3].plot(RG_r_med, HI_RG_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+# axes[1].annotate('young AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+# axes[1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGy_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+# axes[2].annotate('older AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+# axes[2].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+# axes[3].annotate('RGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+# axes[3].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(RG_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
 
 # for ax in axes:
 # 	ax.set_xlim(4, 20)
@@ -327,171 +380,207 @@ for i in range(len(RG_HIclose_vrot_tr)):
 # rotation_curve(RG_r_not0, RG_vrot_not0, RG_HImain_not0, 'RG', 'not0')
 
 #doing the rotation curves for different n
-MS_r_1=[] #points where n=1
-MS_vrot_1=[]
-MS_HImain_1=[]
-MS_r_2=[] #points where n=2
-MS_vrot_2=[]
-MS_HImain_2=[]
-MS_r_3=[] #points where n=3
-MS_vrot_3=[]
-MS_HImain_3=[]
-MS_r_4=[] #points where n=4
-MS_vrot_4=[]
-MS_HImain_4=[]
-MS_r_5=[] #points where n=5
-MS_vrot_5=[]
-MS_HImain_5=[]
-for i in range(len(MS_r)):
-	if MS_n[i]==1:
-		MS_r_1.append(MS_r[i])
-		MS_vrot_1.append(MS_vrot_tr[i])
-		MS_HImain_1.append(MS_HImain_vrot_tr[i])
-	if MS_n[i]==2:
-		MS_r_2.append(MS_r[i])
-		MS_vrot_2.append(MS_vrot_tr[i])
-		MS_HImain_2.append(MS_HImain_vrot_tr[i])
-	if MS_n[i]==3:
-		MS_r_3.append(MS_r[i])
-		MS_vrot_3.append(MS_vrot_tr[i])
-		MS_HImain_3.append(MS_HImain_vrot_tr[i])
-	if MS_n[i]==4:
-		MS_r_4.append(MS_r[i])
-		MS_vrot_4.append(MS_vrot_tr[i])
-		MS_HImain_4.append(MS_HImain_vrot_tr[i])
-	if MS_n[i]==5:
-		MS_r_5.append(MS_r[i])
-		MS_vrot_5.append(MS_vrot_tr[i])
-		MS_HImain_5.append(MS_HImain_vrot_tr[i])
+# MS_r_1=[] #points where n=1
+# MS_vrot_1=[]
+# MS_HImain_1=[]
+# MS_r_2=[] #points where n=2
+# MS_vrot_2=[]
+# MS_HImain_2=[]
+# MS_r_3=[] #points where n=3
+# MS_vrot_3=[]
+# MS_HImain_3=[]
+# MS_r_4=[] #points where n=4
+# MS_vrot_4=[]
+# MS_HImain_4=[]
+# MS_r_5=[] #points where n=5
+# MS_vrot_5=[]
+# MS_HImain_5=[]
+# for i in range(len(MS_r)):
+# 	if MS_n[i]==1:
+# 		MS_r_1.append(MS_r[i])
+# 		MS_vrot_1.append(MS_vrot_tr[i])
+# 		MS_HImain_1.append(MS_HImain_vrot_tr[i])
+# 	if MS_n[i]==2:
+# 		MS_r_2.append(MS_r[i])
+# 		MS_vrot_2.append(MS_vrot_tr[i])
+# 		MS_HImain_2.append(MS_HImain_vrot_tr[i])
+# 	if MS_n[i]==3:
+# 		MS_r_3.append(MS_r[i])
+# 		MS_vrot_3.append(MS_vrot_tr[i])
+# 		MS_HImain_3.append(MS_HImain_vrot_tr[i])
+# 	if MS_n[i]==4:
+# 		MS_r_4.append(MS_r[i])
+# 		MS_vrot_4.append(MS_vrot_tr[i])
+# 		MS_HImain_4.append(MS_HImain_vrot_tr[i])
+# 	if MS_n[i]==5:
+# 		MS_r_5.append(MS_r[i])
+# 		MS_vrot_5.append(MS_vrot_tr[i])
+# 		MS_HImain_5.append(MS_HImain_vrot_tr[i])
 
-AGy_r_1=[] #points where n=1
-AGy_vrot_1=[]
-AGy_HImain_1=[]
-AGy_r_2=[] #points where n=2
-AGy_vrot_2=[]
-AGy_HImain_2=[]
-AGy_r_3=[] #points where n=3
-AGy_vrot_3=[]
-AGy_HImain_3=[]
-AGy_r_4=[] #points where n=4
-AGy_vrot_4=[]
-AGy_HImain_4=[]
-AGy_r_5=[] #points where n=5
-AGy_vrot_5=[]
-AGy_HImain_5=[]
-for i in range(len(AGy_r)):
-	if AGy_n[i]==1:
-		AGy_r_1.append(AGy_r[i])
-		AGy_vrot_1.append(AGy_vrot_tr[i])
-		AGy_HImain_1.append(AGy_HImain_vrot_tr[i])
-	if AGy_n[i]==2:
-		AGy_r_2.append(AGy_r[i])
-		AGy_vrot_2.append(AGy_vrot_tr[i])
-		AGy_HImain_2.append(AGy_HImain_vrot_tr[i])
-	if AGy_n[i]==3:
-		AGy_r_3.append(AGy_r[i])
-		AGy_vrot_3.append(AGy_vrot_tr[i])
-		AGy_HImain_3.append(AGy_HImain_vrot_tr[i])
-	if AGy_n[i]==4:
-		AGy_r_4.append(AGy_r[i])
-		AGy_vrot_4.append(AGy_vrot_tr[i])
-		AGy_HImain_4.append(AGy_HImain_vrot_tr[i])
-	if AGy_n[i]==5:
-		AGy_r_5.append(AGy_r[i])
-		AGy_vrot_5.append(AGy_vrot_tr[i])
-		AGy_HImain_5.append(AGy_HImain_vrot_tr[i])
+# AGy_r_1=[] #points where n=1
+# AGy_vrot_1=[]
+# AGy_HImain_1=[]
+# AGy_r_2=[] #points where n=2
+# AGy_vrot_2=[]
+# AGy_HImain_2=[]
+# AGy_r_3=[] #points where n=3
+# AGy_vrot_3=[]
+# AGy_HImain_3=[]
+# AGy_r_4=[] #points where n=4
+# AGy_vrot_4=[]
+# AGy_HImain_4=[]
+# AGy_r_5=[] #points where n=5
+# AGy_vrot_5=[]
+# AGy_HImain_5=[]
+# for i in range(len(AGy_r)):
+# 	if AGy_n[i]==1:
+# 		AGy_r_1.append(AGy_r[i])
+# 		AGy_vrot_1.append(AGy_vrot_tr[i])
+# 		AGy_HImain_1.append(AGy_HImain_vrot_tr[i])
+# 	if AGy_n[i]==2:
+# 		AGy_r_2.append(AGy_r[i])
+# 		AGy_vrot_2.append(AGy_vrot_tr[i])
+# 		AGy_HImain_2.append(AGy_HImain_vrot_tr[i])
+# 	if AGy_n[i]==3:
+# 		AGy_r_3.append(AGy_r[i])
+# 		AGy_vrot_3.append(AGy_vrot_tr[i])
+# 		AGy_HImain_3.append(AGy_HImain_vrot_tr[i])
+# 	if AGy_n[i]==4:
+# 		AGy_r_4.append(AGy_r[i])
+# 		AGy_vrot_4.append(AGy_vrot_tr[i])
+# 		AGy_HImain_4.append(AGy_HImain_vrot_tr[i])
+# 	if AGy_n[i]==5:
+# 		AGy_r_5.append(AGy_r[i])
+# 		AGy_vrot_5.append(AGy_vrot_tr[i])
+# 		AGy_HImain_5.append(AGy_HImain_vrot_tr[i])
 
-AGo_r_1=[] #points where n=1
-AGo_vrot_1=[]
-AGo_HImain_1=[]
-AGo_r_2=[] #points where n=2
-AGo_vrot_2=[]
-AGo_HImain_2=[]
-AGo_r_3=[] #points where n=3
-AGo_vrot_3=[]
-AGo_HImain_3=[]
-AGo_r_4=[] #points where n=4
-AGo_vrot_4=[]
-AGo_HImain_4=[]
-AGo_r_5=[] #points where n=5
-AGo_vrot_5=[]
-AGo_HImain_5=[]
-for i in range(len(AGo_r)):
-	if AGo_n[i]==1:
-		AGo_r_1.append(AGo_r[i])
-		AGo_vrot_1.append(AGo_vrot_tr[i])
-		AGo_HImain_1.append(AGo_HImain_vrot_tr[i])
-	if AGo_n[i]==2:
-		AGo_r_2.append(AGo_r[i])
-		AGo_vrot_2.append(AGo_vrot_tr[i])
-		AGo_HImain_2.append(AGo_HImain_vrot_tr[i])
-	if AGo_n[i]==3:
-		AGo_r_3.append(AGo_r[i])
-		AGo_vrot_3.append(AGo_vrot_tr[i])
-		AGo_HImain_3.append(AGo_HImain_vrot_tr[i])
-	if AGo_n[i]==4:
-		AGo_r_4.append(AGo_r[i])
-		AGo_vrot_4.append(AGo_vrot_tr[i])
-		AGo_HImain_4.append(AGo_HImain_vrot_tr[i])
-	if AGo_n[i]==5:
-		AGo_r_5.append(AGo_r[i])
-		AGo_vrot_5.append(AGo_vrot_tr[i])
-		AGo_HImain_5.append(AGo_HImain_vrot_tr[i])
+# AGo_r_1=[] #points where n=1
+# AGo_vrot_1=[]
+# AGo_HImain_1=[]
+# AGo_r_2=[] #points where n=2
+# AGo_vrot_2=[]
+# AGo_HImain_2=[]
+# AGo_r_3=[] #points where n=3
+# AGo_vrot_3=[]
+# AGo_HImain_3=[]
+# AGo_r_4=[] #points where n=4
+# AGo_vrot_4=[]
+# AGo_HImain_4=[]
+# AGo_r_5=[] #points where n=5
+# AGo_vrot_5=[]
+# AGo_HImain_5=[]
+# for i in range(len(AGo_r)):
+# 	if AGo_n[i]==1:
+# 		AGo_r_1.append(AGo_r[i])
+# 		AGo_vrot_1.append(AGo_vrot_tr[i])
+# 		AGo_HImain_1.append(AGo_HImain_vrot_tr[i])
+# 	if AGo_n[i]==2:
+# 		AGo_r_2.append(AGo_r[i])
+# 		AGo_vrot_2.append(AGo_vrot_tr[i])
+# 		AGo_HImain_2.append(AGo_HImain_vrot_tr[i])
+# 	if AGo_n[i]==3:
+# 		AGo_r_3.append(AGo_r[i])
+# 		AGo_vrot_3.append(AGo_vrot_tr[i])
+# 		AGo_HImain_3.append(AGo_HImain_vrot_tr[i])
+# 	if AGo_n[i]==4:
+# 		AGo_r_4.append(AGo_r[i])
+# 		AGo_vrot_4.append(AGo_vrot_tr[i])
+# 		AGo_HImain_4.append(AGo_HImain_vrot_tr[i])
+# 	if AGo_n[i]==5:
+# 		AGo_r_5.append(AGo_r[i])
+# 		AGo_vrot_5.append(AGo_vrot_tr[i])
+# 		AGo_HImain_5.append(AGo_HImain_vrot_tr[i])
 
-RG_r_1=[] #points where n=1
-RG_vrot_1=[]
-RG_HImain_1=[]
-RG_r_2=[] #points where n=2
-RG_vrot_2=[]
-RG_HImain_2=[]
-RG_r_3=[] #points where n=3
-RG_vrot_3=[]
-RG_HImain_3=[]
-RG_r_4=[] #points where n=4
-RG_vrot_4=[]
-RG_HImain_4=[]
-RG_r_5=[] #points where n=5
-RG_vrot_5=[]
-RG_HImain_5=[]
-for i in range(len(RG_r)):
-	if RG_n[i]==1:
-		RG_r_1.append(RG_r[i])
-		RG_vrot_1.append(RG_vrot_tr[i])
-		RG_HImain_1.append(RG_HImain_vrot_tr[i])
-	if RG_n[i]==2:
-		RG_r_2.append(RG_r[i])
-		RG_vrot_2.append(RG_vrot_tr[i])
-		RG_HImain_2.append(RG_HImain_vrot_tr[i])
-	if RG_n[i]==3:
-		RG_r_3.append(RG_r[i])
-		RG_vrot_3.append(RG_vrot_tr[i])
-		RG_HImain_3.append(RG_HImain_vrot_tr[i])
-	if RG_n[i]==4:
-		RG_r_4.append(RG_r[i])
-		RG_vrot_4.append(RG_vrot_tr[i])
-		RG_HImain_4.append(RG_HImain_vrot_tr[i])
-	if RG_n[i]==5:
-		RG_r_5.append(RG_r[i])
-		RG_vrot_5.append(RG_vrot_tr[i])
-		RG_HImain_5.append(RG_HImain_vrot_tr[i])
+# RG_r_1=[] #points where n=1
+# RG_vrot_1=[]
+# RG_HImain_1=[]
+# RG_r_2=[] #points where n=2
+# RG_vrot_2=[]
+# RG_HImain_2=[]
+# RG_r_3=[] #points where n=3
+# RG_vrot_3=[]
+# RG_HImain_3=[]
+# RG_r_4=[] #points where n=4
+# RG_vrot_4=[]
+# RG_HImain_4=[]
+# RG_r_5=[] #points where n=5
+# RG_vrot_5=[]
+# RG_HImain_5=[]
+# for i in range(len(RG_r)):
+# 	if RG_n[i]==1:
+# 		RG_r_1.append(RG_r[i])
+# 		RG_vrot_1.append(RG_vrot_tr[i])
+# 		RG_HImain_1.append(RG_HImain_vrot_tr[i])
+# 	if RG_n[i]==2:
+# 		RG_r_2.append(RG_r[i])
+# 		RG_vrot_2.append(RG_vrot_tr[i])
+# 		RG_HImain_2.append(RG_HImain_vrot_tr[i])
+# 	if RG_n[i]==3:
+# 		RG_r_3.append(RG_r[i])
+# 		RG_vrot_3.append(RG_vrot_tr[i])
+# 		RG_HImain_3.append(RG_HImain_vrot_tr[i])
+# 	if RG_n[i]==4:
+# 		RG_r_4.append(RG_r[i])
+# 		RG_vrot_4.append(RG_vrot_tr[i])
+# 		RG_HImain_4.append(RG_HImain_vrot_tr[i])
+# 	if RG_n[i]==5:
+# 		RG_r_5.append(RG_r[i])
+# 		RG_vrot_5.append(RG_vrot_tr[i])
+# 		RG_HImain_5.append(RG_HImain_vrot_tr[i])
+
+# from functions import *
+# AGo_r_med1, AGo_vrot_med1 = median_line(AGo_r_1, AGo_vrot_1)
+# AGo_r_med2, AGo_vrot_med2 = median_line(AGo_r_2, AGo_vrot_2)
+# AGo_r_med3, AGo_vrot_med3 = median_line(AGo_r_3, AGo_vrot_3)
+# AGo_r_med4, AGo_vrot_med4 = median_line(AGo_r_4, AGo_vrot_4)
+# AGo_r_med5, AGo_vrot_med5 = median_line(AGo_r_5, AGo_vrot_5)
+# AGo_r_med1, AGo_HIvrot_med1 = median_line(AGo_r_1, AGo_HImain_1)
+# AGo_r_med2, AGo_HIvrot_med2 = median_line(AGo_r_2, AGo_HImain_2)
+# AGo_r_med3, AGo_HIvrot_med3 = median_line(AGo_r_3, AGo_HImain_3)
+# AGo_r_med4, AGo_HIvrot_med4 = median_line(AGo_r_4, AGo_HImain_4)
+# AGo_r_med5, AGo_HIvrot_med5 = median_line(AGo_r_5, AGo_HImain_5)
+
+# AGo_AD1 = asymmetric_drift(AGo_vrot_1, AGo_HImain_1)
+# AGo_AD2 = asymmetric_drift(AGo_vrot_2, AGo_HImain_2)
+# AGo_AD3 = asymmetric_drift(AGo_vrot_3, AGo_HImain_3)
+# AGo_AD4 = asymmetric_drift(AGo_vrot_4, AGo_HImain_4)
+# AGo_AD5 = asymmetric_drift(AGo_vrot_5, AGo_HImain_5)
 
 # rc('font', family = 'serif')
 # f, axes= plt.subplots(2,3, sharey=True, sharex=False, figsize=(10,5))
-# axes[0,0].scatter(RG_r_1, RG_HImain_1, s=2, c='darkgray')
-# axes[0,0].scatter(RG_r_1, RG_vrot_1, s=2, c='r', alpha=0.4)
-# axes[0,1].scatter(RG_r_2, RG_HImain_2, s=2, c='darkgray')
-# axes[0,1].scatter(RG_r_2, RG_vrot_2, s=2, c='r', alpha=0.4)
-# axes[0,2].scatter(RG_r_3, RG_HImain_3, s=2, c='darkgray')
-# axes[0,2].scatter(RG_r_3, RG_vrot_3, s=2, c='r', alpha=0.4)
-# axes[1,0].scatter(RG_r_4, RG_HImain_4, s=2, c='darkgray')
-# axes[1,0].scatter(RG_r_4, RG_vrot_4, s=2, c='r', alpha=0.4)
-# axes[1,1].scatter(RG_r_5, RG_HImain_5, s=2, c='darkgray')
-# axes[1,1].scatter(RG_r_5, RG_vrot_5, s=2, c='r', alpha=0.4)
+# axes[0,0].scatter(AGo_r_1, AGo_HImain_1, s=2, c='darkgray')
+# axes[0,0].scatter(AGo_r_1, AGo_vrot_1, s=2, c='green', alpha=0.4)
+# axes[0,1].scatter(AGo_r_2, AGo_HImain_2, s=2, c='darkgray')
+# axes[0,1].scatter(AGo_r_2, AGo_vrot_2, s=2, c='green', alpha=0.4)
+# axes[0,2].scatter(AGo_r_3, AGo_HImain_3, s=2, c='darkgray')
+# axes[0,2].scatter(AGo_r_3, AGo_vrot_3, s=2, c='green', alpha=0.4)
+# axes[1,0].scatter(AGo_r_4, AGo_HImain_4, s=2, c='darkgray')
+# axes[1,0].scatter(AGo_r_4, AGo_vrot_4, s=2, c='green', alpha=0.4)
+# axes[1,1].scatter(AGo_r_5, AGo_HImain_5, s=2, c='darkgray')
+# axes[1,1].scatter(AGo_r_5, AGo_vrot_5, s=2, c='green', alpha=0.4)
 # axes[0,0].annotate(r'$N_{\rm HI}=1$', xy=(5,115), horizontalalignment='left', fontsize=12)
 # axes[0,1].annotate(r'$N_{\rm HI}=2$', xy=(5,115), horizontalalignment='left', fontsize=12)
 # axes[0,2].annotate(r'$N_{\rm HI}=3$', xy=(5,115), horizontalalignment='left', fontsize=12)
 # axes[1,0].annotate(r'$N_{\rm HI}=4$', xy=(5,115), horizontalalignment='left', fontsize=12)
 # axes[1,1].annotate(r'$N_{\rm HI}=5$', xy=(5,115), horizontalalignment='left', fontsize=12)
+
+# axes[0,0].plot(AGo_r_med1, AGo_vrot_med1, linestyle='-', c='black', linewidth = 1.8)
+# axes[0,0].plot(AGo_r_med1, AGo_HIvrot_med1, linestyle='--', c='black', linewidth = 1.8)
+# axes[0,1].plot(AGo_r_med2, AGo_vrot_med2, linestyle='-', c='black', linewidth = 1.8)
+# axes[0,1].plot(AGo_r_med2, AGo_HIvrot_med2, linestyle='--', c='black', linewidth = 1.8)
+# axes[0,2].plot(AGo_r_med3, AGo_vrot_med3, linestyle='-', c='black', linewidth = 1.8)
+# axes[0,2].plot(AGo_r_med3, AGo_HIvrot_med3, linestyle='--', c='black', linewidth = 1.8)
+# axes[1,0].plot(AGo_r_med4, AGo_vrot_med4, linestyle='-', c='black', linewidth = 1.8)
+# axes[1,0].plot(AGo_r_med4, AGo_HIvrot_med4, linestyle='--', c='black', linewidth = 1.8)
+# axes[1,1].plot(AGo_r_med5, AGo_vrot_med5, linestyle='-', c='black', linewidth = 1.8)
+# axes[1,1].plot(AGo_r_med5, AGo_HIvrot_med5, linestyle='--', c='black', linewidth = 1.8)
+
+# axes[0,0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD1),2)) + r'$\rm km\ s^{-1}$', xy=(10,115), horizontalalignment='left', fontsize=12)
+# axes[0,1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD2),2)) + r'$\rm km\ s^{-1}$', xy=(10,115), horizontalalignment='left', fontsize=12)
+# axes[0,2].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD3),2)) + r'$\rm km\ s^{-1}$', xy=(10,115), horizontalalignment='left', fontsize=12)
+# axes[1,0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD4),2)) + r'$\rm km\ s^{-1}$', xy=(10,115), horizontalalignment='left', fontsize=12)
+# axes[1,1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD5),2)) + r'$\rm km\ s^{-1}$', xy=(10,115), horizontalalignment='left', fontsize=12)
+
 
 # for ax in axes[0,:]:
 # 	ax.set_xlim(4, 20)
@@ -562,13 +651,21 @@ for i in range(len(RG_r)):
 # axes[0,2].tick_params(labelsize=0)
 # nbins = 4
 # axes[0,0].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune=None))
+# axes[0, 0].set_yticks([100, 150, 200, 250, 300])
 # axes[1,0].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+
+# nbins= 6
+# axes[0,0].xaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[1,0].xaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[0,1].xaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[1,1].xaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[0,2].xaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
 
 # f.subplots_adjust(left=0.17)
 # f.text(0.10, 0.5, r'$\rm Rotation\ Velocity:\ \it v_{\rm rot}\ \rm(km\ s^{-1})$', va='center', rotation='vertical', fontsize=13)
 
 # plt.subplots_adjust(wspace=0, hspace=0)
-# plt.savefig('/Users/amandaquirk/Desktop/RG_rotation_curves.pdf', bbox_inches='tight')
+#plt.savefig('/Users/amandaquirk/Desktop/AGo_rotation_curves.pdf', bbox_inches='tight')
 
 # rotation_curve(MS_r_1, MS_vrot_1, MS_HImain_1, 'MS', 1)
 # rotation_curve(MS_r_2, MS_vrot_2, MS_HImain_2, 'MS', 2)

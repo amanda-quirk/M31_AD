@@ -131,11 +131,37 @@ def velocity_maps(xi, eta, velocity):
 ========================================================================================================================'''
 #calculates the asymmetric drift
 def asymmetric_drift(v_star, v_gas):
+	v_gas = np.array((v_gas))
+	v_star = np.array((v_star))
 	return v_gas-v_star
 
 
 def color(mag1, mag2):
 	return [a-b for a,b in zip(mag1,mag2)]
+
+#finds median lines for rotation curves
+def median_line(r, v):
+
+	delta_r = 0.5 #kpc
+	bins = np.arange(5, 20, delta_r)
+	median_r = bins - delta_r / 2
+	
+	medians = np.zeros_like(bins)
+
+	for i in range(len(bins)):
+		data = [b for a,b in zip(r, v) if a < bins[i] and a > bins[i] - delta_r]
+		if len(data) > 5:
+			medians[i] = np.median(data)
+		else:
+			medians[i] = np.nan
+
+	data = (np.isnan(medians) == False)
+
+	good_r = median_r[data]
+	good_v = medians[data]
+
+	return good_r, good_v
+
 '''Rotation Velocities
 ========================================================================================================================'''
 #I define a functionto calculate the rotation speed without a tiled ring model

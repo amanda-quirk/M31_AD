@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
+from functions import *
 
 #coordinate data
 MS_xi, MS_eta=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_smoothed_chemin.txt', usecols=(0,1), unpack=True)
@@ -12,6 +13,12 @@ MS_r, MS_vrot, MS_HI=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Da
 AGy_r, AGy_vrot, AGy_HI=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_master_vrot.txt', usecols=(0,2,8), unpack=True)
 AGo_r, AGo_vrot, AGo_HI=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_master_vrot.txt', usecols=(0,2,8), unpack=True)
 RG_r, RG_vrot, RG_HI=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_master_vrot.txt', usecols=(0,2,8), unpack=True)
+
+# median_r, MS_vrot_med, HI_MS_vrot_med = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_med.txt', unpack=True)
+# AGy_vrot_med, HI_AGy_vrot_med = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_med.txt', usecols=(1,2,), unpack=True)
+# AGo_vrot_med, HI_AGo_vrot_med = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_med.txt', usecols=(1,2,), unpack=True)
+# RG_vrot_med, HI_RG_vrot_med = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_med.txt', usecols=(1,2,), unpack=True)
+
 
 def x(xi, eta):
 	xi_deg=xi/13.67
@@ -228,6 +235,21 @@ def rotation_curve(r, star_vrot, HI_vrot, age, description):
 from matplotlib import rc 
 from matplotlib.ticker import MaxNLocator
 
+RG_r_med, RG_vrot_med_high = median_line(RG_r_highfactor, RG_vrot_highfactor)
+MS_r_med, MS_vrot_med_high = median_line(MS_r_highfactor, MS_vrot_highfactor)
+AGy_r_med, AGy_vrot_med_high = median_line(AGy_r_highfactor, AGy_vrot_highfactor)
+AGo_r_med, AGo_vrot_med_high = median_line(AGo_r_highfactor, AGo_vrot_highfactor)
+HI_RG_r_med, HI_RG_vrot_med_high = median_line(RG_r_highfactor, RG_HI_highfactor)
+HI_MS_r_med, HI_MS_vrot_med_high = median_line(MS_r_highfactor, MS_HI_highfactor)
+HI_AGy_r_med, HI_AGy_vrot_med_high = median_line(AGy_r_highfactor, AGy_HI_highfactor)
+HI_AGo_r_med, HI_AGo_vrot_med_high = median_line(AGo_r_highfactor, AGo_HI_highfactor)
+
+#compute median AD 
+RG_AD = asymmetric_drift(RG_vrot_highfactor, RG_HI_highfactor)
+AGy_AD = asymmetric_drift(AGy_vrot_highfactor, AGy_HI_highfactor)
+AGo_AD = asymmetric_drift(AGo_vrot_highfactor, AGo_HI_highfactor)
+MS_AD = asymmetric_drift(MS_vrot_highfactor, MS_HI_highfactor)
+
 rc('font', family = 'serif')
 f, axes= plt.subplots(4,1, sharey=False, sharex=True, figsize=(4,9.8))
 axes[0].scatter(MS_r_highfactor, MS_HI_highfactor, s=2, c='darkgray')
@@ -235,13 +257,25 @@ axes[0].scatter(MS_r_highfactor, MS_vrot_highfactor, s=2, c='b', alpha=0.4)
 axes[1].scatter(AGy_r_highfactor, AGy_HI_highfactor, s=2, c='darkgray')
 axes[1].scatter(AGy_r_highfactor, AGy_vrot_highfactor, s=2, c='m', alpha=0.4)
 axes[2].scatter(AGo_r_highfactor, AGo_HI_highfactor, s=2, c='darkgray')
-axes[2].scatter(AGo_r_highfactor, AGo_vrot_highfactor, s=2, c='k', alpha=0.4)
+axes[2].scatter(AGo_r_highfactor, AGo_vrot_highfactor, s=2, c='green', alpha=0.4)
 axes[3].scatter(RG_r_highfactor, RG_HI_highfactor, s=2, c='darkgray')
 axes[3].scatter(RG_r_highfactor, RG_vrot_highfactor, s=2, c='r', alpha=0.4)
-axes[0].annotate('MS', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[1].annotate('young AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[2].annotate('older AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[3].annotate('RGB', xy=(19,115), horizontalalignment='right', fontsize=12)
+axes[0].annotate('MS', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(MS_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[0].plot(MS_r_med, MS_vrot_med_high, linestyle='-', c='black', linewidth = 1.8, alpha=.85)
+axes[0].plot(HI_MS_r_med, HI_MS_vrot_med_high, linestyle='--', c='black', linewidth = 1.8, alpha=.85)
+axes[1].plot(AGy_r_med, AGy_vrot_med_high, linestyle='-', c='black', linewidth = 1.8)
+axes[1].plot(HI_AGy_r_med, HI_AGy_vrot_med_high, linestyle='--', c='black', linewidth = 1.8)
+axes[2].plot(AGo_r_med, AGo_vrot_med_high, linestyle='-', c='black', linewidth = 1.8)
+axes[2].plot(HI_AGo_r_med, HI_AGo_vrot_med_high, linestyle='--', c='black', linewidth = 1.8)
+axes[3].plot(RG_r_med, RG_vrot_med_high, linestyle='-', c='black', linewidth = 1.8)
+axes[3].plot(HI_RG_r_med, HI_RG_vrot_med_high, linestyle='--', c='black', linewidth = 1.8)
+axes[1].annotate('young AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGy_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[2].annotate('older AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[2].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[3].annotate('RGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[3].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(RG_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
 
 for ax in axes:
 	ax.set_xlim(4, 20)

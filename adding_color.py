@@ -1,5 +1,6 @@
 # from astropy.io import fits 
 # from astropy.table import Table 
+from matplotlib.colors import LogNorm
 import matplotlib.pyplot as plt 
 import numpy as np 
 from matplotlib import rc,rcParams
@@ -120,6 +121,12 @@ for i in range(len(color)):
 		AGy_color.append(color[i])
 		AGy_F8W.append(mag[i])
 
+color1 = np.concatenate((MS_color, AGy_color), axis=None)
+color2= np.concatenate((color1, AGo_color), axis=None)
+color = np.concatenate((color2, RG_color), axis=None)
+mag1 = np.concatenate((MS_F8W, AGy_F8W), axis=None)
+mag2= np.concatenate((mag1, AGo_F8W), axis=None)
+mag = np.concatenate((mag2, RG_F8W), axis=None)
 #plotting CMD
 # fig, ax=plt.subplots(1)
 # ax.set_rasterization_zorder(1)
@@ -144,16 +151,22 @@ plt.tick_params(which='major', length=7)
 plt.tick_params(which='minor', length=4)
 plt.tick_params(labelsize=12) 
 plt.minorticks_on()
-plt.scatter(MS_color, MS_F8W, color='b', alpha=0.3, label='MS', zorder=0)
-plt.scatter(AGy_color, AGy_F8W, color='m', alpha=0.3, label='young AGB',zorder=0)
-plt.scatter(AGo_color, AGo_F8W, color='k', alpha=0.3, label='older AGB',zorder=0)
-plt.scatter(RG_color, RG_F8W, color='r', alpha=0.3, label='RGB',zorder=0)
+plt.scatter(MS_color, MS_F8W, color='b', alpha=0.3, s=7, label='MS', zorder=0)
+plt.scatter(AGy_color, AGy_F8W, color='m', alpha=0.3, s=7, label='young AGB',zorder=0)
+plt.scatter(AGo_color, AGo_F8W, color='green', alpha=0.3, s=7, label='older AGB',zorder=0, marker='s')
+plt.scatter(RG_color, RG_F8W, color='r', alpha=0.2, s=3, label='RGB',zorder=0)
+ax.annotate('MS', xy=(1.7,21), horizontalalignment='right', fontsize=13)
+ax.annotate('young AGB', xy=(5,19.3), horizontalalignment='right', fontsize=13)
+ax.annotate('older AGB', xy=(7.6,21), horizontalalignment='right', fontsize=13)
+ax.annotate('RGB', xy=(4,22.5), horizontalalignment='right', fontsize=13)
+#im=ax.hist2d(color, mag, bins=900, cmap=plt.cm.binary,  norm=LogNorm())
+#plt.colorbar(im[3], ax=ax)
 plt.xlabel(r'$\rm F475W - F814W$', fontsize=14)
 plt.xlim(-1,8)
 plt.ylim(18,23)
 plt.gca().invert_yaxis()
 plt.ylabel(r'$\rm F814W$', fontsize=14)
-plt.legend(frameon=False, fontsize=10)
+#plt.legend(frameon=False, fontsize=10)
 plt.savefig('/Users/amandaquirk/Desktop/CMD.pdf', bbox_inches='tight')
 plt.close()
 

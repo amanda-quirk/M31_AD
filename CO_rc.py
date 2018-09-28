@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib import rc 
 from matplotlib.ticker import MaxNLocator
+from functions import *
 
 #r (kpc), v_rot no model (km/s), v_rot tr model, smoothed PA, sPA v_rot no model, sPA v_rot tr model, n, HI main no model, HI main tr, HI close no model, HI close tr
 RG_r, RG_vrot, RG_HI_vrot = np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_master_vrot.txt', usecols=(0,2,8), unpack=True)
@@ -195,48 +196,68 @@ RG_CO_v = Vrot_tilted_ring(RG_CO_v_helio, RG_CO_PA_ring, RG_CO_PA, RG_CO_i)
 # plt.savefig('/Users/amandaquirk/Desktop/RG_CO_rc.png')
 # plt.close()
 
-rc('font', family = 'serif')
-f, axes= plt.subplots(4,1, sharey=False, sharex=True, figsize=(4,9.8))
-axes[0].scatter(MS_r, MS_CO_v, s=2, c='darkcyan')
-axes[0].scatter(MS_r, MS_vrot, s=2, c='b', alpha=0.4)
-axes[1].scatter(AGy_r, AGy_CO_v, s=2, c='darkcyan')
-axes[1].scatter(AGy_r, AGy_vrot, s=2, c='m', alpha=0.4)
-axes[2].scatter(AGo_r, AGo_CO_v, s=2, c='darkcyan')
-axes[2].scatter(AGo_r, AGo_vrot, s=2, c='k', alpha=0.4)
-axes[3].scatter(RG_r, RG_CO_v, s=2, c='darkcyan')
-axes[3].scatter(RG_r, RG_vrot, s=2, c='r', alpha=0.4)
-axes[0].annotate('MS', xy=(9,115), horizontalalignment='left', fontsize=12)
-axes[1].annotate('young AGB', xy=(9,115), horizontalalignment='left', fontsize=12)
-axes[2].annotate('older AGB', xy=(9,115), horizontalalignment='left', fontsize=12)
-axes[3].annotate('RGB', xy=(9,115), horizontalalignment='left', fontsize=12)
+# from functions import *
+# median_r = bins - delta_r / 2
+# RG_vrot_med = median_line(RG_r, RG_vrot)
+# MS_vrot_med = median_line(MS_r, MS_vrot)
+# AGy_vrot_med = median_line(AGy_r, AGy_vrot)
+# AGo_vrot_med = median_line(AGo_r, AGo_vrot)
+# HI_RG_vrot_med = median_line(RG_r, RG_CO_v)
+# HI_MS_vrot_med = median_line(MS_r, MS_CO_v)
+# HI_AGy_vrot_med = median_line(AGy_r, AGy_CO_v)
+# HI_AGo_vrot_med = median_line(AGo_r, AGo_CO_v)
 
-for ax in axes:
-	ax.set_xlim(4, 20)
-	#ax.set_ylabel(r'$\rm v_{\rm rot} \ (km\ s^{-1})$', fontsize=13)
-	ax.set_ylim(100,300)
-	ax.tick_params(axis='x',which='both',bottom='on',top='off', direction='out')
-	ax.tick_params(axis='x',which='both',top='on', direction='in')
-	ax.tick_params(axis='y',which='both',left='on',top='off', direction='out')
-	ax.tick_params(axis='y',which='both',right='on', direction='in')
-	ax.tick_params(which='both', width=2)
-	ax.tick_params(which='major', length=7)
-	ax.tick_params(which='minor', length=4)
-	ax.tick_params(labelsize=12) 
-	ax.minorticks_on()
-	for axis in ['top','bottom','left','right']:
-	        ax.spines[axis].set_linewidth(2)
-axes[3].set_xlabel(r'$\rm Radial\ Distance:\ \it r \ \rm(kpc)$', fontsize=13)
-nbins = len(axes[0].get_yticklabels())-1
-axes[3].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
-axes[1].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
-axes[2].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
-f.subplots_adjust(left=0.17)
-f.text(0.008, 0.5, r'$\rm Rotation\ Velocity:\ \it v_{\rm rot}\ \rm(km\ s^{-1})$', va='center', rotation='vertical', fontsize=13)
-plt.subplots_adjust(wspace=0, hspace=0)
-plt.savefig('/Users/amandaquirk/Desktop/CO_rotation_curves.pdf', bbox_inches='tight')
+# rc('font', family = 'serif')
+# f, axes= plt.subplots(4,1, sharey=False, sharex=True, figsize=(4,9.8))
+# axes[0].scatter(MS_r, MS_CO_v, s=2, c='darkcyan')
+# axes[0].scatter(MS_r, MS_vrot, s=2, c='b', alpha=0.4)
+# axes[1].scatter(AGy_r, AGy_CO_v, s=2, c='darkcyan')
+# axes[1].scatter(AGy_r, AGy_vrot, s=2, c='m', alpha=0.4)
+# axes[2].scatter(AGo_r, AGo_CO_v, s=2, c='darkcyan')
+# axes[2].scatter(AGo_r, AGo_vrot, s=2, c='green', alpha=0.4)
+# axes[3].scatter(RG_r, RG_CO_v, s=2, c='darkcyan')
+# axes[3].scatter(RG_r, RG_vrot, s=2, c='r', alpha=0.4)
+# axes[0].annotate('MS', xy=(9,115), horizontalalignment='left', fontsize=12)
+# axes[1].annotate('young AGB', xy=(9,115), horizontalalignment='left', fontsize=12)
+# axes[2].annotate('older AGB', xy=(9,115), horizontalalignment='left', fontsize=12)
+# axes[3].annotate('RGB', xy=(9,115), horizontalalignment='left', fontsize=12)
 
-def va(gas, stars):
-	return gas - stars
+# axes[0].plot(median_r, MS_vrot_med, linestyle='-', c='black', linewidth = 1.8, alpha=.85)
+# axes[0].plot(median_r, HI_MS_vrot_med, linestyle='--', c='black', linewidth = 1.8, alpha=.85)
+# axes[1].plot(median_r, AGy_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[1].plot(median_r, HI_AGy_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+# axes[2].plot(median_r, AGo_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[2].plot(median_r, HI_AGo_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+# axes[3].plot(median_r, RG_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+# axes[3].plot(median_r, HI_RG_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+
+# for ax in axes:
+# 	ax.set_xlim(4, 20)
+# 	#ax.set_ylabel(r'$\rm v_{\rm rot} \ (km\ s^{-1})$', fontsize=13)
+# 	ax.set_ylim(100,300)
+# 	ax.tick_params(axis='x',which='both',bottom='on',top='off', direction='out')
+# 	ax.tick_params(axis='x',which='both',top='on', direction='in')
+# 	ax.tick_params(axis='y',which='both',left='on',top='off', direction='out')
+# 	ax.tick_params(axis='y',which='both',right='on', direction='in')
+# 	ax.tick_params(which='both', width=2)
+# 	ax.tick_params(which='major', length=7)
+# 	ax.tick_params(which='minor', length=4)
+# 	ax.tick_params(labelsize=12) 
+# 	ax.minorticks_on()
+# 	for axis in ['top','bottom','left','right']:
+# 	        ax.spines[axis].set_linewidth(2)
+# axes[3].set_xlabel(r'$\rm Radial\ Distance:\ \it r \ \rm(kpc)$', fontsize=13)
+# nbins = len(axes[0].get_yticklabels())-1
+# axes[3].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[1].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# axes[2].yaxis.set_major_locator(MaxNLocator(nbins=nbins, prune='upper'))
+# f.subplots_adjust(left=0.17)
+# f.text(0.008, 0.5, r'$\rm Rotation\ Velocity:\ \it v_{\rm rot}\ \rm(km\ s^{-1})$', va='center', rotation='vertical', fontsize=13)
+# plt.subplots_adjust(wspace=0, hspace=0)
+# #plt.savefig('/Users/amandaquirk/Desktop/CO_rotation_curves.pdf', bbox_inches='tight')
+
+# def va(gas, stars):
+# 	return gas - stars
 
 # RG_CO_ad = va(CO_vrot, RG_vrot)
 # RG_HI_ad = va(HI_vrot, RG_vrot)
@@ -251,4 +272,9 @@ def va(gas, stars):
 # plt.savefig('/Users/amandaquirk/Desktop/RG_CO_ad.png')
 
 #np.savetxt('/Users/amandaquirk/Desktop/RG_CO_ad.txt', np.c_[RG_r, CO_vrot, RG_CO_ad], fmt='%1.16f', delimiter=' ', header='r (kpc), v (km/s), ad (km/s)')
+
+RG_AD = asymmetric_drift(RG_vrot, RG_CO_v)
+MS_AD = asymmetric_drift(MS_vrot, MS_CO_v)
+AGy_AD = asymmetric_drift(AGy_vrot, AGy_CO_v)
+AGo_AD = asymmetric_drift(AGo_vrot, AGo_CO_v)
 

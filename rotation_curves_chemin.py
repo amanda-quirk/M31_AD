@@ -551,7 +551,7 @@ def Vrot_tilted_ring(v,PA_ring,PA_star, i_ring):
 
 
 #infinite disk model
-def Vrot_tilted_ring(v,PA_star): 
+def Vrot_thin_disk(v,PA_star): 
 	i_ring = HI_i_avg
 	PA_ring = HI_PA_avg
 	vsys= -300 #km/s, as defined in Claire's thesis
@@ -562,15 +562,31 @@ def Vrot_tilted_ring(v,PA_star):
 	positive=[np.absolute(a) for a in rotation_velocity]
 	return positive
 
-MS_if_vrot_tilt=Vrot_tilted_ring(MS_v, MS_PA)
-RG_if_vrot_tilt=Vrot_tilted_ring(RG_v, RG_PA)
-AGo_if_vrot_tilt=Vrot_tilted_ring(AGo_v, AGo_PA)
-AGy_if_vrot_tilt=Vrot_tilted_ring(AGy_v, AGy_PA)
+MS_if_vrot_tilt=Vrot_thin_disk(MS_v, MS_PA)
+RG_if_vrot_tilt=Vrot_thin_disk(RG_v, RG_PA)
+AGo_if_vrot_tilt=Vrot_thin_disk(AGo_v, AGo_PA)
+AGy_if_vrot_tilt=Vrot_thin_disk(AGy_v, AGy_PA)
 
-MS_HImain_vrot_tr=Vrot_tilted_ring(MS_HImain,MS_PA)
-AGy_HImain_vrot_tr=Vrot_tilted_ring(AGy_HImain,AGy_PA)
-AGo_HImain_vrot_tr=Vrot_tilted_ring(AGo_HImain,AGo_PA)
-RG_HImain_vrot_tr=Vrot_tilted_ring(RG_HImain,RG_PA)
+MS_HImain_vrot_tr=Vrot_thin_disk(MS_HImain,MS_PA)
+AGy_HImain_vrot_tr=Vrot_thin_disk(AGy_HImain,AGy_PA)
+AGo_HImain_vrot_tr=Vrot_thin_disk(AGo_HImain,AGo_PA)
+RG_HImain_vrot_tr=Vrot_thin_disk(RG_HImain,RG_PA)
+
+from functions import *
+RG_r_med, RG_vrot_med = median_line(RG_r, RG_if_vrot_tilt)
+MS_r_med, MS_vrot_med = median_line(MS_r, MS_if_vrot_tilt)
+AGy_r_med, AGy_vrot_med = median_line(AGy_r, AGy_if_vrot_tilt)
+AGo_r_med, AGo_vrot_med = median_line(AGo_r, AGo_if_vrot_tilt)
+HI_RG_r_med, HI_RG_vrot_med = median_line(RG_r, RG_HImain_vrot_tr)
+HI_MS_r_med, HI_MS_vrot_med = median_line(MS_r, MS_HImain_vrot_tr)
+HI_AGy_r_med, HI_AGy_vrot_med = median_line(AGy_r, AGy_HImain_vrot_tr)
+HI_AGo_r_med, HI_AGo_vrot_med = median_line(AGo_r, AGo_HImain_vrot_tr)
+
+#compute median AD 
+RG_AD = asymmetric_drift(RG_if_vrot_tilt, RG_HImain_vrot_tr)
+AGy_AD = asymmetric_drift(AGy_if_vrot_tilt, AGy_HImain_vrot_tr)
+AGo_AD = asymmetric_drift(AGo_if_vrot_tilt, AGo_HImain_vrot_tr)
+MS_AD = asymmetric_drift(MS_if_vrot_tilt, MS_HImain_vrot_tr)
 
 from matplotlib import rc 
 from matplotlib.ticker import MaxNLocator
@@ -582,13 +598,25 @@ axes[0].scatter(MS_r, MS_if_vrot_tilt, s=2, c='b', alpha=0.4)
 axes[1].scatter(AGy_r, AGy_HImain_vrot_tr, s=2, c='darkgray')
 axes[1].scatter(AGy_r, AGy_if_vrot_tilt, s=2, c='m', alpha=0.4)
 axes[2].scatter(AGo_r, AGo_HImain_vrot_tr, s=2, c='darkgray')
-axes[2].scatter(AGo_r, AGo_if_vrot_tilt, s=2, c='k', alpha=0.4)
+axes[2].scatter(AGo_r, AGo_if_vrot_tilt, s=2, c='green', alpha=0.4)
 axes[3].scatter(RG_r, RG_HImain_vrot_tr, s=2, c='darkgray')
 axes[3].scatter(RG_r, RG_if_vrot_tilt, s=2, c='r', alpha=0.4)
-axes[0].annotate('MS', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[1].annotate('young AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[2].annotate('older AGB', xy=(19,115), horizontalalignment='right', fontsize=12)
-axes[3].annotate('RGB', xy=(19,115), horizontalalignment='right', fontsize=12)
+axes[0].annotate('MS', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[0].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(MS_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[0].plot(MS_r_med, MS_vrot_med, linestyle='-', c='black', linewidth = 1.8, alpha=.85)
+axes[0].plot(HI_MS_r_med, HI_MS_vrot_med, linestyle='--', c='black', linewidth = 1.8, alpha=.85)
+axes[1].plot(AGy_r_med, AGy_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[1].plot(HI_AGy_r_med, HI_AGy_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[2].plot(AGo_r_med, AGo_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[2].plot(HI_AGo_r_med, HI_AGo_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[3].plot(RG_r_med, RG_vrot_med, linestyle='-', c='black', linewidth = 1.8)
+axes[3].plot(HI_RG_r_med, HI_RG_vrot_med, linestyle='--', c='black', linewidth = 1.8)
+axes[1].annotate('young AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[1].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGy_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[2].annotate('older AGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[2].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(AGo_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
+axes[3].annotate('RGB', xy=(19,128), horizontalalignment='right', fontsize=10)
+axes[3].annotate(r'$\overline{v}_{\rm a}=$'+ '${}$'.format(round(np.median(RG_AD),2)) + r'$\rm km\ s^{-1}$', xy=(19,112), horizontalalignment='right', fontsize=10)
 
 for ax in axes:
 	ax.set_xlim(4, 20)
