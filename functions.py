@@ -41,6 +41,22 @@ def y_kpc(xi, eta):
 
 '''Major Plotting
 ======================================================================================================================='''
+#pretty single plot formatting
+def single_plot():
+	rc('font', family = 'serif')
+	fig, ax=plt.subplots(1)
+	for axis in ['top','bottom','left','right']:
+	        ax.spines[axis].set_linewidth(2)
+	ax.tick_params(axis='x',which='both',bottom='on',top='on', direction='out')
+	ax.tick_params(axis='x',which='both',top='on', direction='in')
+	ax.tick_params(axis='y',which='both',left='on',top='off', direction='out')
+	ax.tick_params(axis='y',which='both',right='on', direction='in')
+	plt.tick_params(which='both', width=2)
+	plt.tick_params(which='major', length=7)
+	plt.tick_params(which='minor', length=4)
+	plt.tick_params(labelsize=12) 
+	plt.minorticks_on()
+
 #velocity dispersion maps
 def dispersion_map(xi, eta, dispersion):
 	plt.figure(figsize=(4, 6))

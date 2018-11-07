@@ -35,6 +35,25 @@ AGy_ad=asymmetric_drift(AGy_vrot_tr, AGy_HImain_vrot_tr)
 AGo_ad=asymmetric_drift(AGo_vrot_tr, AGo_HImain_vrot_tr)
 RG_ad=asymmetric_drift(RG_vrot_tr, RG_HImain_vrot_tr)
 
+def errors(AD):
+#	not_outlier = (AD < 300) & (AD > -200)
+	result = np.percentile(AD, [16, 50, 84])
+	median = result[1]
+	lower_error = result[1] - result[0]
+	upper_error = result[2] - result[1]
+	return median, lower_error, upper_error
+
+print('HI')
+print(errors(MS_ad))
+print(errors(AGy_ad))
+print(errors(AGo_ad))
+print(errors(RG_ad))
+print('CO')
+print(errors(MS_ad_CO))
+print(errors(AGy_ad_CO))
+print(errors(AGo_ad_CO))
+print(errors(RG_ad_CO))
+
 MS_range=max(MS_ad)-min(MS_ad)
 AGy_range=max(AGy_ad)-min(AGy_ad)
 AGo_range=max(AGo_ad)-min(AGo_ad)
@@ -193,7 +212,7 @@ axes[0].set_ylabel(r'$\rm Velocity\ Dispersion:\ \sigma\ (km\ s^{-1})$', fontsiz
 f.subplots_adjust(bottom=0.13)
 f.text(0.5, 0.008, r'$\rm Dust\ Extinction:\ \itA_{v}$', ha='center', fontsize=13)
 plt.subplots_adjust(wspace=0, hspace=0)
-plt.savefig('/Users/amandaquirk/Desktop/disp_dust.pdf', bbox_inches='tight')
+#plt.savefig('/Users/amandaquirk/Desktop/disp_dust.pdf', bbox_inches='tight')
 
 # lag_n_plt(MS_n, MS_ad, 'MS')
 # lag_n_plt(AGy_n, AGy_ad, 'AGy')
