@@ -5,6 +5,9 @@ from matplotlib import rc,rcParams
 from matplotlib.ticker import MaxNLocator
 from matplotlib import patches
 
+
+# ---- ENIA: When it rains look for rainbows, when it's dark look for galaxies!! 
+
 #import rotation curve data
 #r (kpc), v_rot no model (km/s), v_rot tr model, smoothed PA, sPA v_rot no model, sPA v_rot tr model, n, HI main no model, HI main tr, HI close no model, HI close tr
 MS_r, MS_vrot_tr, MS_HImain_vrot_tr, MS_HIclose_vrot_tr=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_master_vrot.txt', usecols=(0,2,8,10), unpack=True)
@@ -22,6 +25,8 @@ AGy_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_dust.tx
 AGo_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_dust.txt', usecols=(2,), unpack=True)
 RG_Av=np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/RG_dust.txt', usecols=(2,), unpack=True)
 
+# --- ENIA: Chin up princess!!  
+
 MS_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/MS_CO_ad.txt', usecols=(2,), unpack= True)
 AGy_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGy_CO_ad.txt', usecols=(2,), unpack= True)
 AGo_ad_CO= np.loadtxt('/Users/amandaquirk/Documents/AsymmetricDrift/Data/AGo_CO_ad.txt', usecols=(2,), unpack= True)
@@ -35,6 +40,8 @@ AGy_ad=asymmetric_drift(AGy_vrot_tr, AGy_HImain_vrot_tr)
 AGo_ad=asymmetric_drift(AGo_vrot_tr, AGo_HImain_vrot_tr)
 RG_ad=asymmetric_drift(RG_vrot_tr, RG_HImain_vrot_tr)
 
+# ENIA: The code is tough, but so are you. 
+ 
 def errors(AD):
 #	not_outlier = (AD < 300) & (AD > -200)
 	result = np.percentile(AD, [16, 50, 84])
@@ -111,6 +118,7 @@ def lag_r_n_plt(n, lag, radius, age):
 	plt.savefig('/Users/amandaquirk/Desktop/{}_lag_r_n.png'.format(age))
 	plt.close()
 
+# ENIA: Don't get discouraged!! Good things take time!! 
 
 # rc('font', family = 'serif')
 # cmap=plt.cm.rainbow
